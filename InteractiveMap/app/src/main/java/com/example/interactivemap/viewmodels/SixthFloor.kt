@@ -20,11 +20,11 @@ class SixthFloor(application: Application) : AndroidViewModel(application) {
     private val tileStreamProvider = makeTileStreamProvider6(appContext)
 
     val state: MapState by mutableStateOf(
-        MapState(4, 4096, 4096, tileStreamProvider).apply {
+        MapState(5, 4056, 2048, tileStreamProvider).apply {
             shouldLoopScale = true
             enableRotation()
             viewModelScope.launch {
-                scrollTo(0.25, 0.25, 1f)
+                scrollTo(0.4, 0.25, 1f)
             }
         }
     )
