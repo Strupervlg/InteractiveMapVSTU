@@ -13,11 +13,11 @@ import ovh.plrapps.mapcompose.api.scrollTo
 import ovh.plrapps.mapcompose.api.shouldLoopScale
 import ovh.plrapps.mapcompose.ui.state.MapState
 
-class NinthFloor(application: Application) : AndroidViewModel(application) {
+class SixthFloor(application: Application) : AndroidViewModel(application) {
     private val appContext: Context by lazy {
         getApplication<Application>().applicationContext
     }
-    private val tileStreamProvider = makeTileStreamProvider9(appContext)
+    private val tileStreamProvider = makeTileStreamProvider6(appContext)
 
     val state: MapState by mutableStateOf(
         MapState(4, 4096, 4096, tileStreamProvider).apply {
