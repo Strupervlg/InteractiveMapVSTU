@@ -16,6 +16,8 @@ import com.example.interactivemap.R
 import com.example.interactivemap.providers.*
 import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.*
+import ovh.plrapps.mapcompose.ui.layout.Fill
+import ovh.plrapps.mapcompose.ui.layout.MinimumScaleMode
 import ovh.plrapps.mapcompose.ui.state.MapState
 
 class NinthFloor(application: Application) : AndroidViewModel(application) {
@@ -39,6 +41,7 @@ class NinthFloor(application: Application) : AndroidViewModel(application) {
 
     val state: MapState by mutableStateOf(
         MapState(5, 4056, 2048, tileStreamProvider).apply {
+            minimumScaleMode = Fill
             for (marker in markers) {
                 addMarker(marker.id, marker.x, marker.y) {
                     Icon(

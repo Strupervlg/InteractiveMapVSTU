@@ -9,8 +9,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.interactivemap.providers.*
 import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.enableRotation
+import ovh.plrapps.mapcompose.api.minimumScaleMode
 import ovh.plrapps.mapcompose.api.scrollTo
 import ovh.plrapps.mapcompose.api.shouldLoopScale
+import ovh.plrapps.mapcompose.ui.layout.Fill
 import ovh.plrapps.mapcompose.ui.state.MapState
 
 class SixthFloor(application: Application) : AndroidViewModel(application) {
@@ -21,6 +23,7 @@ class SixthFloor(application: Application) : AndroidViewModel(application) {
 
     val state: MapState by mutableStateOf(
         MapState(5, 4056, 2048, tileStreamProvider).apply {
+            minimumScaleMode = Fill
             shouldLoopScale = true
             enableRotation()
             viewModelScope.launch {
