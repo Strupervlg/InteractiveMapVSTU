@@ -3,6 +3,7 @@ package com.example.interactivemap
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
@@ -12,10 +13,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import com.example.interactivemap.ui.screens.StartScreen
 import com.example.interactivemap.viewmodels.NinthFloor
-
+import 	android.media.MediaPlayer
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
+        val mMediaPlayer = MediaPlayer.create(this, R.raw.map)
+        mMediaPlayer!!.start()
         super.onCreate(savedInstanceState)
         setContent {
             InteractiveMapTheme {
@@ -29,6 +33,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
