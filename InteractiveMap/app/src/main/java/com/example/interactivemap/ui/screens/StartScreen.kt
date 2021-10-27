@@ -1,15 +1,11 @@
 package com.example.interactivemap.ui.screens
 
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import com.example.interactivemap.viewmodels.*
 import ovh.plrapps.mapcompose.ui.MapUI
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -22,76 +18,89 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.focus.*
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.interactivemap.R
+import com.example.interactivemap.ui.theme.VSTUBlue
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
+import ovh.plrapps.mapcompose.api.onMarkerClick
 
-var sizeSpaceBetweenButtons : Float = 1.5F
+var sizeSpaceBetweenButtons: Float = 1.5F
 
 @ExperimentalAnimationApi
 @Composable
 fun StartScreen(modifier: Modifier = Modifier) {
     val floors = listOf(14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
     val selectedOption = remember { mutableStateOf(floors[0]) }
+    val r = remember { mutableStateOf("") }
 
-    if(selectedOption.value == 9) {
+    if (selectedOption.value == 9) {
         val floor: NinthFloor = viewModel()
         MapUI(modifier, state = floor.state)
-    }
-    if(selectedOption.value == 6) {
-        val floor: SixthFloor = viewModel()
-        MapUI(modifier, state = floor.state)
+        floor.state.onMarkerClick { id, x, y ->
+            if (r.value == id) {
+                r.value = ""
+            } else {
+                r.value = id
+            }
+        }
     }
 
-    Column(modifier =Modifier.padding(10.dp)) {
+    if (selectedOption.value == 6) {
+        val floor: SixthFloor = viewModel()
+        MapUI(modifier, state = floor.state)
+        floor.state.onMarkerClick { id, x, y ->
+            if (r.value == id) {
+                r.value = ""
+            } else {
+                r.value = id
+            }
+        }
+    }
+
+    Column(modifier = Modifier.padding(10.dp)) {
         Spacer(modifier = Modifier.height(70.dp))
         floors.forEach { floor ->
             val selected = selectedOption.value == floor
             Button(onClick = { selectedOption.value = floor }, modifier =
-                Modifier
-                    .selectable(
-                        selected = selected,
-                        onClick = {  }
-                    )
-                    .border(
-                        width= if(selected){2.dp} else{0.dp},
-                        color = Color.Black
-                    ),
+            Modifier
+                .selectable(
+                    selected = selected,
+                    onClick = { }
+                )
+                .border(
+                    width = if (selected) {2.dp} else {0.dp},
+                    color = Color.Black
+                ),
                 colors = ButtonDefaults.textButtonColors(
-                backgroundColor = if(selected){
-                    MaterialTheme.colors.secondary}else{
-                    MaterialTheme.colors.primary},
-                contentColor = Color.Black
-            )
+                    backgroundColor = if (selected) {
+                        MaterialTheme.colors.secondary
+                    } else {
+                        MaterialTheme.colors.primary
+                    },
+                    contentColor = Color.Black
+                )
             ) {
                 Text(text = floor.toString())
             }
             Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
         }
     }
-
 
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
@@ -108,8 +117,11 @@ fun StartScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
 
-        Button( onClick = { coroutineScope.launch {
-            snackbarHostState.showSnackbar(message = "Данная функция временно не поддерживается") } }
+        Button(onClick = {
+            coroutineScope.launch {
+                snackbarHostState.showSnackbar(message = "Данная функция временно не поддерживается")
+            }
+        }
         )
         { Text("Навигатор") }
 
@@ -139,6 +151,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
             state.searching = false
         }
     }
+    cabinetDescription(r)
 }
 
 val suggestionList = listOf(
@@ -385,7 +398,7 @@ fun SearchBar(
     onQueryChange: (TextFieldValue) -> Unit,
     onSearchFocusChange: (Boolean) -> Unit,
     onClearQuery: () -> Unit,
-    onBack: ()-> Unit,
+    onBack: () -> Unit,
     searching: Boolean,
     focused: Boolean,
     modifier: Modifier = Modifier
@@ -402,7 +415,7 @@ fun SearchBar(
         AnimatedVisibility(visible = focused) {
             // Back button
             IconButton(
-                modifier = Modifier.padding(start =2.dp),
+                modifier = Modifier.padding(start = 2.dp),
                 onClick = {
                     focusManager.clearFocus()
                     keyboardController?.hide()
@@ -422,4 +435,78 @@ fun SearchBar(
             modifier.weight(1f)
         )
     }
+}
+
+
+@Composable
+@ExperimentalAnimationApi
+fun cabinetDescription(idCabindet: MutableState<String>) {
+    if (!idCabindet.value.isEmpty()) {
+        var visibleDescription = remember { mutableStateOf(true) }
+        AnimatedVisibility(visible = visibleDescription.value) {
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 80.dp, end = 2.dp, bottom = 2.dp),
+                verticalAlignment = Alignment.Bottom
+            ) {
+                Card(
+                    shape = RoundedCornerShape(15.dp),
+                    backgroundColor = Color.White,
+                    border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                    modifier = Modifier
+                        .size(310.dp, 240.dp)
+                    ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Text(
+                            text = idCabindet.value,
+                            fontSize = 40.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 10.dp, end = 10.dp, top = 60.dp),
+                        horizontalArrangement = Arrangement.Center,
+                        verticalAlignment = Alignment.Top
+                    ) {
+                        Text(cabinetToDiscription(idCabindet.value))
+                    }
+
+                    Column(
+                        horizontalAlignment = Alignment.End,
+                        verticalArrangement = Arrangement.Top
+                    ) {
+                        IconButton(
+                            modifier = Modifier.padding(start = 2.dp),
+                            onClick = {
+                                visibleDescription.value = false
+                                idCabindet.value = ""
+                            }) {
+                            Icon(imageVector = Icons.Default.Close, contentDescription = null)
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun cabinetToDiscription(cabinet: String): String {
+    if (cabinet == "901") return "Лекционный класс"
+    else if (cabinet == "902а") return "Аудитория для проведения лабораторных работ"
+    else if (cabinet == "902б") return "Аудитория для проведения лабораторных работ"
+    else if (cabinet == "902в") return "Аудитория для проведения лабораторных работ и практик"
+    else if (cabinet == "903") return "Аудитория V.I.S.D.O.M. laboratory"
+    else if (cabinet == "904") return "Преподавательская"
+    else if (cabinet == "905") return "Преподавательская"
+    else if (cabinet == "906") return "Аудитория для проведения практик"
+    else if (cabinet == "907") return "Аудитория для проведения практик"
+    else if (cabinet == "908") return "Аудитория для проведения практик"
+    else return ""
 }
