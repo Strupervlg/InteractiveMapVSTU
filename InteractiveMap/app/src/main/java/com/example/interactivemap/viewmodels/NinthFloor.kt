@@ -66,4 +66,4 @@ class NinthFloor(application: Application) : AndroidViewModel(application) {
     )
 }
 
-private data class MarkerInfo(val id: String, val x: Double, val y: Double, val idPaint: Int)
+data class MarkerInfo(val id: String, val x: Double, val y: Double, val idPaint: Int)
