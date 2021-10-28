@@ -331,25 +331,6 @@ fun SearchTextField(
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
-//                    TextField(modifier = Modifier
-//                        .fillMaxWidth(.9f)
-//                        .padding(8.dp)
-//                        .background(color = Color.White)
-//                        ,
-//                        value = query,
-//                        onValueChange = onQueryChange,
-//                        label = { Text("Поиск") },
-//                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-//                        keyboardActions = KeyboardActions(
-//                            onDone = {
-//                                // keyboardController?.hide()
-//                                focusManager.clearFocus()
-//                            }
-//                        ),leadingIcon = {
-//                            Icon(imageVector = Icons.Filled.Search, contentDescription = null)
-//                        },
-//                        textStyle = TextStyle(color = MaterialTheme.colors.onSurface)
-//                    )
                     BasicTextField(
                         value = query,
                         onValueChange = onQueryChange,

@@ -1,5 +1,6 @@
 package com.example.interactivemap
 
+import android.media.AudioAttributes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,12 +12,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import com.example.interactivemap.ui.screens.StartScreen
 import 	android.media.MediaPlayer
+import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         val player = MediaPlayer.create(this, R.raw.cut_map)
-        player.start()
+
         super.onCreate(savedInstanceState)
         setContent {
             InteractiveMapTheme {
@@ -24,6 +26,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
                     StartScreen()
+                    player!!.start()
                 }
             }
         }
