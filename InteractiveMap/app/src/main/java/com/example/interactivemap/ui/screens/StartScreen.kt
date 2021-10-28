@@ -50,6 +50,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val r = remember { mutableStateOf("") }
 
     if (selectedOption.value == 9) {
+        r.value = ""
         val floor: NinthFloor = viewModel()
         MapUI(modifier, state = floor.state)
         floor.state.onMarkerClick { id, x, y ->
@@ -62,6 +63,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
     }
 
     if (selectedOption.value == 6) {
+        r.value = ""
         val floor: SixthFloor = viewModel()
         MapUI(modifier, state = floor.state)
         floor.state.onMarkerClick { id, x, y ->
