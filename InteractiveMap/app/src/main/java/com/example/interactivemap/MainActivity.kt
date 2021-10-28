@@ -8,18 +8,15 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import com.example.interactivemap.ui.screens.StartScreen
-import com.example.interactivemap.viewmodels.NinthFloor
 import 	android.media.MediaPlayer
 
 class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
-        val mMediaPlayer = MediaPlayer.create(this, R.raw.map)
-        mMediaPlayer!!.start()
+        val player = MediaPlayer.create(this, R.raw.cut_map)
+        player.start()
         super.onCreate(savedInstanceState)
         setContent {
             InteractiveMapTheme {
