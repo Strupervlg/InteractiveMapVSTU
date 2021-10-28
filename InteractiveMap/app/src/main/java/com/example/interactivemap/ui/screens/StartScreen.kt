@@ -84,11 +84,8 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 .selectable(
                     selected = selected,
                     onClick = { }
-                )
-                .border(
-                    width = if (selected) {2.dp} else {0.dp},
-                    color = Color.Black
                 ),
+                border = BorderStroke(width = if (selected) {2.dp} else {0.dp}, color = Color.Black),
                 colors = ButtonDefaults.textButtonColors(
                     backgroundColor = if (selected) {
                         MaterialTheme.colors.secondary
