@@ -61,7 +61,18 @@ fun StartScreen(modifier: Modifier = Modifier) {
             }
         }
     }
-
+    if (selectedOption.value == 8) {
+        r.value = ""
+        val floor: EighthFloor = viewModel()
+        MapUI(modifier, state = floor.state)
+        floor.state.onMarkerClick { id, x, y ->
+            if (r.value == id) {
+                r.value = ""
+            } else {
+                r.value = id
+            }
+        }
+    }
     if (selectedOption.value == 6) {
         r.value = ""
         val floor: SixthFloor = viewModel()

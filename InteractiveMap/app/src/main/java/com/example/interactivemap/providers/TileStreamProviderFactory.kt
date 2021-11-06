@@ -20,3 +20,12 @@ fun makeTileStreamProvider9(appContext: Context) =
             null
         }
     }
+
+fun makeTileStreamProvider8(appContext: Context) =
+    TileStreamProvider { row, col, zoomLvl ->
+        try {
+            appContext.assets?.open("tiles/eighth_floor/$zoomLvl/$row/$col.jpg")
+        } catch (e: Exception) {
+            null
+        }
+    }
