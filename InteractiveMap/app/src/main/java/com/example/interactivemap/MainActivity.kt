@@ -10,11 +10,16 @@ import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
-import com.example.interactivemap.ui.screens.StartScreen
 import 	android.media.MediaPlayer
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.interactivemap.ui.screens.*
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalFoundationApi
+    @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         val player = MediaPlayer.create(this, R.raw.cut_map)
@@ -26,10 +31,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
                     StartScreen()
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
                     player!!.start()
                 }
             }
@@ -37,6 +39,8 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Preview(showBackground = true)
 @Composable

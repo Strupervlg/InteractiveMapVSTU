@@ -2,13 +2,15 @@ package com.example.interactivemap.ui.screens
 
 import androidx.compose.ui.Modifier
 import com.example.interactivemap.viewmodels.*
+import com.example.interactivemap.*
 import ovh.plrapps.mapcompose.ui.MapUI
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -39,31 +41,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.onMarkerClick
-<<<<<<< Updated upstream
-
-var sizeSpaceBetweenButtons: Float = 1.5F
-
-=======
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.AndroidViewModel
-import ovh.plrapps.mapcompose.api.centerOnMarker
-import java.lang.NumberFormatException
-import androidx.lifecycle.viewModelScope
+
 
 var sizeSpaceBetweenButtons: Float = 1.5F
 
 
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
->>>>>>> Stashed changes
 @ExperimentalAnimationApi
 @Composable
 fun StartScreen(modifier: Modifier = Modifier) {
@@ -173,13 +159,6 @@ fun StartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
     }
 
-<<<<<<< Updated upstream
-    val state: SearchState = rememberSearchState()
-
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-=======
     val mainViewModel: HomeViewModel = viewModel()
     mainViewModel.cabinetList = createComponentTutorialList()
 
@@ -188,40 +167,25 @@ fun StartScreen(modifier: Modifier = Modifier) {
         selectedOption = selectedOption,
         onCenter = centerOn
     )
-    
+
     cabinetDescription(r)
 }
->>>>>>> Stashed changes
 
-        SearchBar(
-            query = state.query,
-            onQueryChange = { state.query = it },
-            onSearchFocusChange = { state.focused = it },
-            onClearQuery = { state.query = TextFieldValue("") },
-            onBack = { state.query = TextFieldValue("") },
-            searching = state.searching,
-            focused = state.focused,
-            modifier = modifier
-        )
-
-        LaunchedEffect(state.query.text) {
-            state.searching = true
-            delay(100)
-            state.searching = false
-        }
-    }
-    cabinetDescription(r)
+data class SuggestionModel(val tag: String) {
+    val id = tag.hashCode()
 }
 
 val suggestionList = listOf(
-    SuggestionModel("Деканат"),
-    SuggestionModel("Кафедра ПОАС"),
-    SuggestionModel("Кафедра высшей математики")
+    SuggestionModel("Преподавательская"),
+    SuggestionModel("Аудитория для проведения лабораторных работ"),
+    SuggestionModel("Аудитория для проведения практик"),
+    SuggestionModel("Аудитория V.I.S.D.O.M. laboratory"),
+    SuggestionModel("Лекционный класс"),
+    SuggestionModel("Suck"),
+    SuggestionModel("my"),
+    SuggestionModel("duck")
 )
 
-<<<<<<< Updated upstream
-class SearchViewModel : ViewModel() {
-=======
 data class CabinetSectionModel(
     val title: String,
     val action: @Composable (() -> Unit)? = null,
@@ -326,14 +290,10 @@ fun createComponentTutorialList(): List<CabinetSectionModel> {
 //}
 
 class HomeViewModel : ViewModel() {
->>>>>>> Stashed changes
 
     var selectedPage: Int = 0
 
-    lateinit var componentCabinetList: List<CabinetModel>
-    lateinit var layoutCabinets: List<CabinetModel>
-
-    val cabinetList = mutableListOf<List<CabinetModel>>()
+    var cabinetList = emptyList<CabinetSectionModel>()
 
     private val _suggestionState = MutableStateFlow<List<SuggestionModel>>(suggestionList)
 
@@ -345,58 +305,29 @@ class HomeViewModel : ViewModel() {
 
     }
 
-    fun getCabinets(query: String): List<CabinetModel> {
+    fun getCabinets(query: String): List<CabinetSectionModel> {
 
-        val filteredList = linkedSetOf<CabinetModel>()
+        val filteredList = linkedSetOf<CabinetSectionModel>()
 
-        cabinetList.forEach { list: List<CabinetModel> ->
+        cabinetList.forEach { cabinetSectionModel ->
 
-            list.forEach { cabinetModel ->
+            if (cabinetSectionModel.title.contains(query, ignoreCase = true)) {
+                filteredList.add(cabinetSectionModel)
+            }
 
-                if (cabinetModel.description.contains(query, ignoreCase = true)) {
-                    filteredList.add(cabinetModel)
-                }
-
-                cabinetModel.tags.forEach {
-                    if (it.contains(query, ignoreCase = true)) {
-                        filteredList.add(cabinetModel)
-                    }
+            cabinetSectionModel.tags.forEach {
+                if (it.contains(query, ignoreCase = true)) {
+                    filteredList.add(cabinetSectionModel)
                 }
             }
         }
 
 //        println("🤖 ViewModel Query: $query, filteredList: ${filteredList.size}")
 
-        return if (query.isEmpty()) cabinetList[selectedPage] else filteredList.toList()
+        return if (query.isEmpty()) cabinetList else filteredList.toList()
     }
 }
 
-<<<<<<< Updated upstream
-data class SuggestionModel(val tag: String) {
-    val id = tag.hashCode()
-}
-
-data class CabinetModel(
-    val title: String,
-    val action: @Composable (() -> Unit)? = null,
-    val description: String,
-    val tags: List<String> = listOf(),
-    val tagColor: Color = Color(0xff00BCD4),
-    var expanded: Boolean = false
-)
-
-enum class SearchDisplay {
-    InitialResults, Suggestions, Results, NoResults
-}
-
-@Stable
-class SearchState(
-    query: TextFieldValue,
-    focused: Boolean,
-    searching: Boolean,
-    suggestions: List<SuggestionModel>,
-    searchResults: List<CabinetModel>
-=======
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
@@ -406,106 +337,34 @@ fun HomeScreen(
     state: SearchState<CabinetSectionModel, SuggestionModel> = rememberSearchState(),
     selectedOption: MutableState<Int>,
     onCenter: MutableState<String>
->>>>>>> Stashed changes
 ) {
-    var query by mutableStateOf(query)
-    var focused by mutableStateOf(focused)
-    var searching by mutableStateOf(searching)
-    var suggestions by mutableStateOf(suggestions)
-    var searchResults by mutableStateOf(searchResults)
+//    println("✅ HomeScreen() state:\n$state")
 
-    val searchDisplay: SearchDisplay
-        get() = when {
-            !focused && query.text.isEmpty() -> SearchDisplay.InitialResults
-            focused && query.text.isEmpty() -> SearchDisplay.Suggestions
-            searchResults.isEmpty() -> SearchDisplay.NoResults
-            else -> SearchDisplay.Results
+    state.suggestions = viewModel.suggestionState.collectAsState(initial = suggestionList).value
+
+    Column(
+        modifier = modifier.fillMaxSize()
+    ) {
+
+        SearchBar(
+            query = state.query,
+            onQueryChange = { state.query = it },
+            onSearchFocusChange = { state.focused = it },
+            onClearQuery = { state.query = TextFieldValue("") },
+            onBack = { state.query = TextFieldValue("") },
+            searching = state.searching,
+            focused = state.focused,
+            modifier = modifier
+        )
+
+        LaunchedEffect(state.query.text) {
+            state.searching = true
+//            println("⚠️ HomeScreen() LaunchedEffect query: ${state.query.text}, searching: ${state.searching}")
+            delay(100)
+            state.searchResults = viewModel.getCabinets(state.query.text)
+            state.searching = false
         }
 
-    override fun toString(): String {
-        return "🚀 State query: $query, focused: $focused, searching: $searching " +
-                "suggestions: ${suggestions.size}, " +
-                "searchResults: ${searchResults.size}, " +
-                " searchDisplay: $searchDisplay"
-
-    }
-}
-
-@Composable
-fun rememberSearchState(
-    query: TextFieldValue = TextFieldValue(""),
-    focused: Boolean = false,
-    searching: Boolean = false,
-    suggestions: List<SuggestionModel> = emptyList(),
-    searchResults: List<CabinetModel> = emptyList()
-): SearchState {
-    return remember {
-        SearchState(
-            query = query,
-            focused = focused,
-            searching = searching,
-            suggestions = suggestions,
-            searchResults = searchResults
-        )
-    }
-}
-
-@Composable
-private fun SearchHint(modifier: Modifier = Modifier) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .fillMaxSize()
-            .then(modifier)
-
-<<<<<<< Updated upstream
-    ) {
-        Text(
-            color = Color(0xff757575),
-            text = "Search a Tag or Description",
-        )
-    }
-}
-
-@Composable
-fun SearchTextField(
-    query: TextFieldValue,
-    onQueryChange: (TextFieldValue) -> Unit,
-    onSearchFocusChange: (Boolean) -> Unit,
-    onClearQuery: () -> Unit,
-    searching: Boolean,
-    focused: Boolean,
-    modifier: Modifier = Modifier
-) {
-
-    val focusRequester = remember { FocusRequester() }
-    val focusManager = LocalFocusManager.current
-
-    Surface(
-        modifier = modifier
-            .then(
-                Modifier
-                    .height(56.dp)
-                    .padding(
-                        top = 8.dp,
-                        bottom = 8.dp,
-                        start = if (!focused) 16.dp else 0.dp,
-                        end = 16.dp
-                    )
-            ),
-        color = Color(0xffF5F5F5),
-        shape = RoundedCornerShape(percent = 50),
-    ) {
-
-        CompositionLocalProvider(LocalContentAlpha provides ContentAlpha.medium) {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = modifier
-            ) {
-
-                if (query.text.isEmpty()) {
-                    SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
-=======
         val focusManager = LocalFocusManager.current
         val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -520,86 +379,26 @@ fun SearchTextField(
                     contentAlignment = Alignment.Center
                 ) {
                     Text("No Results!", fontSize = 24.sp, color = Color(0xffDD2C00))
->>>>>>> Stashed changes
                 }
+            }
 
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    BasicTextField(
-                        value = query,
-                        onValueChange = onQueryChange,
-                        modifier = Modifier
-                            .fillMaxHeight()
-                            .weight(1f)
-                            .onFocusChanged {
-                                onSearchFocusChange(it.isFocused)
-                            }
-                            .focusRequester(focusRequester)
-                            .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                        keyboardActions = KeyboardActions(
-                            onDone = {
-                                // keyboardController?.hide()
-                                focusManager.clearFocus()
-                            }
-                        )
-                    )
-
-                    when {
-                        searching -> {
-                            CircularProgressIndicator(
-                                modifier = Modifier
-                                    .padding(horizontal = 6.dp)
-                                    .size(36.dp)
-                            )
+            SearchDisplay.Suggestions -> {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Spacer(modifier = Modifier.height(70.dp))
+                    viewModel.cabinetList.forEach { cab ->
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 16.dp)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(cab.title, fontSize = 24.sp, color = Color(0xffDD2C00))
                         }
-                        query.text.isNotEmpty() -> {
-                            IconButton(onClick = onClearQuery) {
-                                Icon(imageVector = Icons.Filled.Clear, contentDescription = null)
-                            }
-                        }
+                        Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
                     }
                 }
             }
-        }
 
-<<<<<<< Updated upstream
-    }
-}
-
-@ExperimentalAnimationApi
-@OptIn(ExperimentalComposeUiApi::class)
-@Composable
-fun SearchBar(
-    query: TextFieldValue,
-    onQueryChange: (TextFieldValue) -> Unit,
-    onSearchFocusChange: (Boolean) -> Unit,
-    onClearQuery: () -> Unit,
-    onBack: () -> Unit,
-    searching: Boolean,
-    focused: Boolean,
-    modifier: Modifier = Modifier
-) {
-
-    val focusManager = LocalFocusManager.current
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-
-        AnimatedVisibility(visible = focused) {
-            // Back button
-            IconButton(
-                modifier = Modifier.padding(start = 2.dp),
-                onClick = {
-                    focusManager.clearFocus()
-                    keyboardController?.hide()
-                    onBack()
-                }) {
-                Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
-=======
 
             SearchDisplay.Results -> {
                 Column(modifier = Modifier.padding(10.dp)) {
@@ -624,22 +423,10 @@ fun SearchBar(
                         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
                     }
                 }
->>>>>>> Stashed changes
             }
         }
-
-        SearchTextField(
-            query,
-            onQueryChange,
-            onSearchFocusChange,
-            onClearQuery,
-            searching,
-            focused,
-            modifier.weight(1f)
-        )
     }
 }
-
 
 @Composable
 @ExperimentalAnimationApi
