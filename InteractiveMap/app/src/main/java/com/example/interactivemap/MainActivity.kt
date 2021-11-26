@@ -26,6 +26,10 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
                     StartScreen()
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
                     player!!.start()
                 }
             }

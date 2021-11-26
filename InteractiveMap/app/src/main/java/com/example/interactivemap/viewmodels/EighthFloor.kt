@@ -60,4 +60,10 @@ class EighthFloor(application: Application) : AndroidViewModel(application) {
             }
         }
     )
+
+    fun onCenter(id : String) {
+        viewModelScope.launch {
+            state.centerOnMarker(id, 5f)
+        }
+    }
 }

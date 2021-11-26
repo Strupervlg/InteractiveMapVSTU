@@ -64,6 +64,12 @@ class NinthFloor(application: Application) : AndroidViewModel(application) {
             }
         }
     )
+
+    fun onCenter(id : String) {
+        viewModelScope.launch {
+            state.centerOnMarker(id, 5f)
+        }
+    }
 }
 
 data class MarkerInfo(val id: String, val x: Double, val y: Double, val idPaint: Int)

@@ -39,14 +39,37 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.onMarkerClick
+<<<<<<< Updated upstream
 
 var sizeSpaceBetweenButtons: Float = 1.5F
 
+=======
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
+import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.AndroidViewModel
+import ovh.plrapps.mapcompose.api.centerOnMarker
+import java.lang.NumberFormatException
+import androidx.lifecycle.viewModelScope
+
+var sizeSpaceBetweenButtons: Float = 1.5F
+
+
+@ExperimentalComposeUiApi
+@ExperimentalFoundationApi
+>>>>>>> Stashed changes
 @ExperimentalAnimationApi
 @Composable
 fun StartScreen(modifier: Modifier = Modifier) {
     val floors = listOf(14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
     val selectedOption = remember { mutableStateOf(floors[0]) }
+    val centerOn = remember { mutableStateOf("") }
     val r = remember { mutableStateOf("") }
 
     if (selectedOption.value == 9) {
@@ -60,6 +83,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 r.value = id
             }
         }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
+        }
     }
     if (selectedOption.value == 8) {
         r.value = ""
@@ -72,6 +99,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 r.value = id
             }
         }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
+        }
     }
     if (selectedOption.value == 6) {
         r.value = ""
@@ -83,6 +114,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
             } else {
                 r.value = id
             }
+        }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
         }
     }
 
@@ -138,11 +173,25 @@ fun StartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
     }
 
+<<<<<<< Updated upstream
     val state: SearchState = rememberSearchState()
 
     Column(
         modifier = modifier.fillMaxSize()
     ) {
+=======
+    val mainViewModel: HomeViewModel = viewModel()
+    mainViewModel.cabinetList = createComponentTutorialList()
+
+    HomeScreen(
+        viewModel = mainViewModel,
+        selectedOption = selectedOption,
+        onCenter = centerOn
+    )
+    
+    cabinetDescription(r)
+}
+>>>>>>> Stashed changes
 
         SearchBar(
             query = state.query,
@@ -170,7 +219,114 @@ val suggestionList = listOf(
     SuggestionModel("Кафедра высшей математики")
 )
 
+<<<<<<< Updated upstream
 class SearchViewModel : ViewModel() {
+=======
+data class CabinetSectionModel(
+    val title: String,
+    val action: @Composable (() -> Unit)? = null,
+    val description: String,
+    val tags: List<String> = listOf(),
+    val tagColor: Color = Color(0xff00BCD4),
+    var expanded: Boolean = false
+)
+
+@ExperimentalAnimationApi
+@OptIn(ExperimentalMaterialApi::class)
+@ExperimentalFoundationApi
+@ExperimentalComposeUiApi
+@Composable
+fun createComponentTutorialList(): List<CabinetSectionModel> {
+    val tutorial1_1 = CabinetSectionModel(
+        title = "901",
+        action = {
+
+        },
+        description = "Create Rows, Columns and Box, how to add modifiers to " +
+                "composables. Set padding, margin, alignment other properties of composables.",
+        tags = listOf(
+            "Suck"
+        )
+    )
+
+    val tutorial1_2 = CabinetSectionModel(
+        title = "801",
+        action = {
+
+        },
+        description = "Create Rows, Columns and Box, how to add modifiers to " +
+                "composables. Set padding, margin, alignment other properties of composables.",
+        tags = listOf(
+            "my"
+        )
+    )
+
+    val tutorial1_3 = CabinetSectionModel(
+        title = "601",
+        action = {
+
+        },
+        description = "Create Rows, Columns and Box, how to add modifiers to " +
+                "composables. Set padding, margin, alignment other properties of composables.",
+        tags = listOf(
+            "duck"
+        )
+    )
+
+    return listOf(
+        tutorial1_1,
+        tutorial1_2,
+        tutorial1_3
+    )
+}
+
+//@ExperimentalAnimationApi
+//@OptIn(ExperimentalMaterialApi::class)
+//@ExperimentalFoundationApi
+//@ExperimentalComposeUiApi
+//@Composable
+//fun createLayoutTutorialList(): List<TutorialSectionModel> {
+//
+//    val tutorial3_1 = TutorialSectionModel(
+//        title = stringResource(R.string.title3_1),
+//        description = "Create custom modifiers using layout, Measurable, Constraint, Placeable," +
+//                " and LayoutModifier.",
+//        action = {
+//            Tutorial3_1Screen()
+//        },
+//        tags = listOf(
+//            TAG_COMPOSE,
+//            TAG_CUSTOM_MODIFIER,
+//            TAG_MEASURABLE,
+//            TAG_CONSTRAINT,
+//            TAG_PLACEABLE,
+//            TAG_LAYOUT_MODIFIER
+//        ),
+//        tagColor = Color(0xffFFEB3B)
+//    )
+//}
+//
+//@Composable
+//fun createStateTutorialList(): List<TutorialSectionModel> {
+//
+//    val tutorial4_1 = TutorialSectionModel(
+//        title = stringResource(R.string.title_4_1),
+//        description = "This tutorial shows how recomposition happens for flat or hierarchical " +
+//                "designs when Composables are in separate functions or stacked together.",
+//        action = {
+//            Tutorial4_1Screen()
+//        },
+//        tags = listOf(
+//            TAG_COMPOSE,
+//            TAG_RECOMPOSITION,
+//            TAG_STATE
+//        ),
+//        tagColor = Color(0xffE91E63)
+//    )
+//}
+
+class HomeViewModel : ViewModel() {
+>>>>>>> Stashed changes
 
     var selectedPage: Int = 0
 
@@ -215,6 +371,7 @@ class SearchViewModel : ViewModel() {
     }
 }
 
+<<<<<<< Updated upstream
 data class SuggestionModel(val tag: String) {
     val id = tag.hashCode()
 }
@@ -239,6 +396,17 @@ class SearchState(
     searching: Boolean,
     suggestions: List<SuggestionModel>,
     searchResults: List<CabinetModel>
+=======
+@ExperimentalComposeUiApi
+@ExperimentalAnimationApi
+@Composable
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel,
+    state: SearchState<CabinetSectionModel, SuggestionModel> = rememberSearchState(),
+    selectedOption: MutableState<Int>,
+    onCenter: MutableState<String>
+>>>>>>> Stashed changes
 ) {
     var query by mutableStateOf(query)
     var focused by mutableStateOf(focused)
@@ -290,6 +458,7 @@ private fun SearchHint(modifier: Modifier = Modifier) {
             .fillMaxSize()
             .then(modifier)
 
+<<<<<<< Updated upstream
     ) {
         Text(
             color = Color(0xff757575),
@@ -336,6 +505,22 @@ fun SearchTextField(
 
                 if (query.text.isEmpty()) {
                     SearchHint(modifier.padding(start = 24.dp, end = 8.dp))
+=======
+        val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
+
+        when (state.searchDisplay) {
+            SearchDisplay.InitialResults -> {
+            }
+            SearchDisplay.NoResults -> {
+                Box(
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .fillMaxWidth(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text("No Results!", fontSize = 24.sp, color = Color(0xffDD2C00))
+>>>>>>> Stashed changes
                 }
 
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -378,6 +563,7 @@ fun SearchTextField(
             }
         }
 
+<<<<<<< Updated upstream
     }
 }
 
@@ -413,6 +599,32 @@ fun SearchBar(
                     onBack()
                 }) {
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
+=======
+
+            SearchDisplay.Results -> {
+                Column(modifier = Modifier.padding(10.dp)) {
+                    Spacer(modifier = Modifier.height(70.dp))
+                    state.searchResults.forEach { res ->
+                        Box(
+                            modifier = Modifier
+                                .padding(top = 16.dp)
+                                .fillMaxWidth(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Button(onClick = {
+                                selectedOption.value = res.title.get(0).digitToInt()
+                                onCenter.value = res.title
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                                state.query = TextFieldValue("")
+                            }) {
+                                Text(text = res.title)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
+                    }
+                }
+>>>>>>> Stashed changes
             }
         }
 
