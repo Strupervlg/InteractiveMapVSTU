@@ -91,9 +91,7 @@ fun SearchTextField(
 ) {
 
     val focusRequester = remember { FocusRequester() }
-
     val focusManager = LocalFocusManager.current
-
 
     Surface(
         modifier = modifier
@@ -142,8 +140,6 @@ fun SearchTextField(
                                 focusManager.clearFocus()
                             }
                         )
-
-
                     )
 
                     when {
