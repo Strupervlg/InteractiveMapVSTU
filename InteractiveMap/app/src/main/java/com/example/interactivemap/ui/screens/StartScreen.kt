@@ -160,6 +160,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
     }
 
+
     val mainViewModel: HomeViewModel = viewModel()
     mainViewModel.cabinetList = createComponentTutorialList()
 
@@ -548,6 +549,7 @@ fun HomeScreen(
     onCenter: MutableState<String>
 ) {
 
+
     state.suggestions = viewModel.suggestionState.collectAsState(initial = suggestionList).value
 
     Column(
@@ -649,10 +651,10 @@ fun HomeScreen(
                                 }
                             }
                         }
+                        Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
                     }
                 }
             }
-
 
             SearchDisplay.Results -> {
                 Row(
@@ -777,15 +779,6 @@ fun cabinetToDiscription(cabinet: String): String {
     else if (cabinet == "906") return "Аудитория для проведения практик"
     else if (cabinet == "907") return "Аудитория для проведения практик"
     else if (cabinet == "908") return "Аудитория для проведения практик"
-
-    else if (cabinet == "801") return "Аудитория для проведения практик"
-    else if (cabinet == "802") return "Лекционный класс"
-    else if (cabinet == "803") return "Преподавательская"
-    else if (cabinet == "804") return "Аудитория для проведения практик"
-    else if (cabinet == "805") return "Аудитория для проведения практик"
-    else if (cabinet == "806") return "Аудитория для проведения практик"
-    else if (cabinet == "807") return "Преподавательская"
-
     else if (cabinet == "601") return "Аудитория для проведения практик"
     else if (cabinet == "602") return "Аудитория для проведения практик"
     else if (cabinet == "603") return "Аудитория для проведения практик"
