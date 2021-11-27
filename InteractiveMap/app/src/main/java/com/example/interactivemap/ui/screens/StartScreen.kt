@@ -43,16 +43,12 @@ import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.onMarkerClick
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.text.TextRange
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.compose.foundation.lazy.items
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.stringResource
+
 
 var sizeSpaceBetweenButtons: Float = 1.5F
 
+
+@ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
 @ExperimentalAnimationApi
@@ -60,6 +56,7 @@ var sizeSpaceBetweenButtons: Float = 1.5F
 fun StartScreen(modifier: Modifier = Modifier) {
     val floors = listOf(14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
     val selectedOption = remember { mutableStateOf(floors[0]) }
+    val centerOn = remember { mutableStateOf("") }
     val r = remember { mutableStateOf("") }
 
     if (selectedOption.value == 9) {
@@ -73,6 +70,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 r.value = id
             }
         }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
+        }
     }
     if (selectedOption.value == 8) {
         r.value = ""
@@ -85,6 +86,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
                 r.value = id
             }
         }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
+        }
     }
     if (selectedOption.value == 6) {
         r.value = ""
@@ -96,6 +101,10 @@ fun StartScreen(modifier: Modifier = Modifier) {
             } else {
                 r.value = id
             }
+        }
+        if(!centerOn.value.isEmpty()) {
+            floor.onCenter(centerOn.value)
+            centerOn.value = ""
         }
     }
 
@@ -152,7 +161,15 @@ fun StartScreen(modifier: Modifier = Modifier) {
     }
 
 
-    
+    val mainViewModel: HomeViewModel = viewModel()
+    mainViewModel.cabinetList = createComponentTutorialList()
+
+    HomeScreen(
+        viewModel = mainViewModel,
+        selectedOption = selectedOption,
+        onCenter = centerOn
+    )
+
     cabinetDescription(r)
 }
 
@@ -162,13 +179,13 @@ data class SuggestionModel(val tag: String) {
 
 val suggestionList = listOf(
     SuggestionModel("Преподавательская"),
-    SuggestionModel("Аудитория для проведения лабораторных работ"),
-    SuggestionModel("Аудитория для проведения практик"),
-    SuggestionModel("Аудитория V.I.S.D.O.M. laboratory"),
-    SuggestionModel("Лекционный класс"),
-    SuggestionModel("Suck"),
-    SuggestionModel("my"),
-    SuggestionModel("duck")
+    SuggestionModel("Лаборатория"),
+    SuggestionModel("Практика"),
+    SuggestionModel("V.I.S.D.O.M."),
+    SuggestionModel("Лекционная"),
+    SuggestionModel("9 этаж"),
+    SuggestionModel("8 этаж"),
+    SuggestionModel("6 этаж"),
 )
 
 data class CabinetSectionModel(
@@ -185,94 +202,303 @@ data class CabinetSectionModel(
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @Composable
-fun createComponentTutorialList(onBack: () -> Unit): List<CabinetSectionModel> {
-    val tutorial1_1 = CabinetSectionModel(
-        title = "901",
-        action = {
-
-        },
-        description = "Create Rows, Columns and Box, how to add modifiers to " +
-                "composables. Set padding, margin, alignment other properties of composables.",
-        tags = listOf(
-            "Suck"
-        )
-    )
-
-    val tutorial1_2 = CabinetSectionModel(
-        title = "801",
-        action = {
-
-        },
-        description = "Create Rows, Columns and Box, how to add modifiers to " +
-                "composables. Set padding, margin, alignment other properties of composables.",
-        tags = listOf(
-            "my"
-        )
-    )
-
-    val tutorial1_3 = CabinetSectionModel(
+fun createComponentTutorialList(): List<CabinetSectionModel> {
+    val cab601 = CabinetSectionModel(
         title = "601",
-        action = {
-
-        },
-        description = "Create Rows, Columns and Box, how to add modifiers to " +
-                "composables. Set padding, margin, alignment other properties of composables.",
+        description = cabinetToDiscription("601"),
         tags = listOf(
-            "duck"
+            "6 этаж",
+            "Практика"
+        )
+    )
+
+    val cab602 = CabinetSectionModel(
+        title = "602",
+        description = cabinetToDiscription("602"),
+        tags = listOf(
+            "6 этаж",
+            "Практика"
+        )
+    )
+
+    val cab603 = CabinetSectionModel(
+        title = "603",
+        description = cabinetToDiscription("603"),
+        tags = listOf(
+            "6 этаж",
+            "Практика"
+        )
+    )
+
+    val cab604 = CabinetSectionModel(
+        title = "604",
+        description = cabinetToDiscription("604"),
+        tags = listOf(
+            "6 этаж",
+            "Лаборатория"
+        )
+    )
+
+    val cab605 = CabinetSectionModel(
+        title = "605",
+        description = cabinetToDiscription("605"),
+        tags = listOf(
+            "6 этаж",
+            "Лаборатория"
+        )
+    )
+
+    val cab606 = CabinetSectionModel(
+        title = "606",
+        description = cabinetToDiscription("606"),
+        tags = listOf(
+            "6 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab607 = CabinetSectionModel(
+        title = "607",
+        description = cabinetToDiscription("607"),
+        tags = listOf(
+            "6 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab608 = CabinetSectionModel(
+        title = "608",
+        description = cabinetToDiscription("608"),
+        tags = listOf(
+            "6 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab609 = CabinetSectionModel(
+        title = "609",
+        description = cabinetToDiscription("609"),
+        tags = listOf(
+            "6 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab610 = CabinetSectionModel(
+        title = "610",
+        description = cabinetToDiscription("610"),
+        tags = listOf(
+            "6 этаж",
+            "Практика"
+        )
+    )
+
+    val cab611 = CabinetSectionModel(
+        title = "611",
+        description = cabinetToDiscription("611"),
+        tags = listOf(
+            "6 этаж",
+            "Практика"
+        )
+    )
+
+    val cab612 = CabinetSectionModel(
+        title = "612",
+        description = cabinetToDiscription("612"),
+        tags = listOf(
+            "6 этаж",
+            "Лаборатория"
+        )
+    )
+
+    val cab801 = CabinetSectionModel(
+        title = "801",
+        description = cabinetToDiscription("801"),
+        tags = listOf(
+            "8 этаж",
+            "Практика"
+        )
+    )
+
+    val cab802 = CabinetSectionModel(
+        title = "802",
+        description = cabinetToDiscription("802"),
+        tags = listOf(
+            "8 этаж",
+            "Лекционная"
+        )
+    )
+
+    val cab803 = CabinetSectionModel(
+        title = "803",
+        description = cabinetToDiscription("803"),
+        tags = listOf(
+            "8 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab804 = CabinetSectionModel(
+        title = "804",
+        description = cabinetToDiscription("804"),
+        tags = listOf(
+            "8 этаж",
+            "Практика"
+        )
+    )
+
+    val cab805 = CabinetSectionModel(
+        title = "805",
+        description = cabinetToDiscription("805"),
+        tags = listOf(
+            "8 этаж",
+            "Практика"
+        )
+    )
+
+    val cab806 = CabinetSectionModel(
+        title = "806",
+        description = cabinetToDiscription("806"),
+        tags = listOf(
+            "8 этаж",
+            "Практика"
+        )
+    )
+
+    val cab807 = CabinetSectionModel(
+        title = "807",
+        description = cabinetToDiscription("807"),
+        tags = listOf(
+            "8 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab901 = CabinetSectionModel(
+        title = "901",
+        description = cabinetToDiscription("901"),
+        tags = listOf(
+            "9 этаж",
+            "Лекционная"
+        )
+    )
+
+    val cab902a = CabinetSectionModel(
+        title = "902а",
+        description = cabinetToDiscription("902а"),
+        tags = listOf(
+            "9 этаж",
+            "Лаборатория"
+        )
+    )
+
+    val cab902b = CabinetSectionModel(
+        title = "902б",
+        description = cabinetToDiscription("902б"),
+        tags = listOf(
+            "9 этаж",
+            "Лаборатория"
+        )
+    )
+
+    val cab902v = CabinetSectionModel(
+        title = "902в",
+        description = cabinetToDiscription("902в"),
+        tags = listOf(
+            "9 этаж",
+            "Лаборатория",
+            "Практика"
+        )
+    )
+
+    val cab903 = CabinetSectionModel(
+        title = "903",
+        description = cabinetToDiscription("903"),
+        tags = listOf(
+            "9 этаж",
+            "V.I.S.D.O.M."
+        )
+    )
+
+    val cab904 = CabinetSectionModel(
+        title = "904",
+        description = cabinetToDiscription("904"),
+        tags = listOf(
+            "9 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab905 = CabinetSectionModel(
+        title = "905",
+        description = cabinetToDiscription("905"),
+        tags = listOf(
+            "9 этаж",
+            "Преподавательская"
+        )
+    )
+
+    val cab906 = CabinetSectionModel(
+        title = "906",
+        description = cabinetToDiscription("906"),
+        tags = listOf(
+            "9 этаж",
+            "Практика"
+        )
+    )
+
+    val cab907 = CabinetSectionModel(
+        title = "907",
+        description = cabinetToDiscription("907"),
+        tags = listOf(
+            "9 этаж",
+            "Практика"
+        )
+    )
+
+    val cab908 = CabinetSectionModel(
+        title = "908",
+        description = cabinetToDiscription("908"),
+        tags = listOf(
+            "9 этаж",
+            "Практика"
         )
     )
 
     return listOf(
-        tutorial1_1,
-        tutorial1_2,
-        tutorial1_3
+        cab601,
+        cab602,
+        cab603,
+        cab604,
+        cab605,
+        cab606,
+        cab607,
+        cab608,
+        cab609,
+        cab610,
+        cab611,
+        cab612,
+
+        cab801,
+        cab802,
+        cab803,
+        cab804,
+        cab805,
+        cab806,
+        cab807,
+
+        cab901,
+        cab902a,
+        cab902b,
+        cab902v,
+        cab903,
+        cab904,
+        cab905,
+        cab906,
+        cab907,
+        cab908
     )
 }
-
-//@ExperimentalAnimationApi
-//@OptIn(ExperimentalMaterialApi::class)
-//@ExperimentalFoundationApi
-//@ExperimentalComposeUiApi
-//@Composable
-//fun createLayoutTutorialList(): List<TutorialSectionModel> {
-//
-//    val tutorial3_1 = TutorialSectionModel(
-//        title = stringResource(R.string.title3_1),
-//        description = "Create custom modifiers using layout, Measurable, Constraint, Placeable," +
-//                " and LayoutModifier.",
-//        action = {
-//            Tutorial3_1Screen()
-//        },
-//        tags = listOf(
-//            TAG_COMPOSE,
-//            TAG_CUSTOM_MODIFIER,
-//            TAG_MEASURABLE,
-//            TAG_CONSTRAINT,
-//            TAG_PLACEABLE,
-//            TAG_LAYOUT_MODIFIER
-//        ),
-//        tagColor = Color(0xffFFEB3B)
-//    )
-//}
-//
-//@Composable
-//fun createStateTutorialList(): List<TutorialSectionModel> {
-//
-//    val tutorial4_1 = TutorialSectionModel(
-//        title = stringResource(R.string.title_4_1),
-//        description = "This tutorial shows how recomposition happens for flat or hierarchical " +
-//                "designs when Composables are in separate functions or stacked together.",
-//        action = {
-//            Tutorial4_1Screen()
-//        },
-//        tags = listOf(
-//            TAG_COMPOSE,
-//            TAG_RECOMPOSITION,
-//            TAG_STATE
-//        ),
-//        tagColor = Color(0xffE91E63)
-//    )
-//}
 
 class HomeViewModel : ViewModel() {
 
@@ -307,20 +533,22 @@ class HomeViewModel : ViewModel() {
             }
         }
 
-//        println("🤖 ViewModel Query: $query, filteredList: ${filteredList.size}")
-
         return if (query.isEmpty()) cabinetList else filteredList.toList()
     }
 }
 
+@ExperimentalMaterialApi
+@ExperimentalComposeUiApi
 @ExperimentalAnimationApi
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel,
-    state: SearchState<CabinetSectionModel, SuggestionModel> = rememberSearchState()
+    state: SearchState<CabinetSectionModel, SuggestionModel> = rememberSearchState(),
+    selectedOption: MutableState<Int>,
+    onCenter: MutableState<String>
 ) {
-//    println("✅ HomeScreen() state:\n$state")
+
 
     state.suggestions = viewModel.suggestionState.collectAsState(initial = suggestionList).value
 
@@ -341,45 +569,87 @@ fun HomeScreen(
 
         LaunchedEffect(state.query.text) {
             state.searching = true
-//            println("⚠️ HomeScreen() LaunchedEffect query: ${state.query.text}, searching: ${state.searching}")
             delay(100)
             state.searchResults = viewModel.getCabinets(state.query.text)
             state.searching = false
         }
 
+        val focusManager = LocalFocusManager.current
+        val keyboardController = LocalSoftwareKeyboardController.current
+
         when (state.searchDisplay) {
             SearchDisplay.InitialResults -> {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("Hello world!", fontSize = 24.sp, color = Color(0xffDD2C00))
-                }
-            }
-            SearchDisplay.NoResults -> {
-                Box(
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                        .fillMaxWidth(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text("No Results!", fontSize = 24.sp, color = Color(0xffDD2C00))
-                }
             }
 
-            SearchDisplay.Suggestions -> {
-                Column(modifier = Modifier.padding(10.dp)) {
-                    Spacer(modifier = Modifier.height(70.dp))
-                    viewModel.cabinetList.forEach { cab ->
+            SearchDisplay.NoResults -> {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Card(
+                        shape = RoundedCornerShape(15.dp),
+                        backgroundColor = Color.White,
+                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
                         Box(
                             modifier = Modifier
                                 .padding(top = 16.dp)
                                 .fillMaxWidth(),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(cab.title, fontSize = 24.sp, color = Color(0xffDD2C00))
+                            Text("No Results!", fontSize = 24.sp, color = Color(0xffDD2C00))
+                        }
+                    }
+                }
+            }
+
+            SearchDisplay.Suggestions -> {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Card(
+                        shape = RoundedCornerShape(15.dp),
+                        backgroundColor = Color.White,
+                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        val scrollState = rememberScrollState()
+                        LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
+                        Column(modifier = Modifier.padding(10.dp).verticalScroll(scrollState)) {
+                            viewModel.cabinetList.forEach { cab ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(top = 8.dp)
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Card(shape = RoundedCornerShape(10.dp),
+                                        backgroundColor = Color.White,
+                                        border = BorderStroke(width = 1.5.dp, color = VSTUBlue),
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        onClick = {
+                                            selectedOption.value = cab.title.get(0).digitToInt()
+                                            onCenter.value = cab.title
+                                            focusManager.clearFocus()
+                                            keyboardController?.hide()
+                                            state.query = TextFieldValue("")
+                                        }
+                                    ) {
+                                        Column(Modifier.padding(5.dp)) {
+                                            Text(text = "Аудитория " + cab.title,
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Bold)
+                                            Text(text = cab.description,
+                                                fontSize = 15.sp)
+                                        }
+                                    }
+                                }
+                            }
                         }
                         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
                     }
@@ -387,18 +657,51 @@ fun HomeScreen(
             }
 
             SearchDisplay.Results -> {
-                Column(modifier = Modifier.padding(10.dp)) {
-                    Spacer(modifier = Modifier.height(70.dp))
-                    state.searchResults.forEach { res ->
-                        Box(
-                            modifier = Modifier
-                                .padding(top = 16.dp)
-                                .fillMaxWidth(),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(res.title, fontSize = 24.sp, color = Color(0xffDD2C00))
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Card(
+                        shape = RoundedCornerShape(15.dp),
+                        backgroundColor = Color.White,
+                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        modifier = Modifier
+                            .fillMaxHeight()
+                    ) {
+                        val scrollState = rememberScrollState()
+                        LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
+                        Column(modifier = Modifier.padding(10.dp).verticalScroll(scrollState)) {
+                            state.searchResults.forEach { res ->
+                                Box(
+                                    modifier = Modifier
+                                        .padding(top = 8.dp)
+                                        .fillMaxWidth(),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Card(shape = RoundedCornerShape(10.dp),
+                                        backgroundColor = Color.White,
+                                        border = BorderStroke(width = 1.5.dp, color = VSTUBlue),
+                                        modifier = Modifier
+                                            .fillMaxWidth(),
+                                        onClick = {
+                                            selectedOption.value = res.title.get(0).digitToInt()
+                                            onCenter.value = res.title
+                                            focusManager.clearFocus()
+                                            keyboardController?.hide()
+                                            state.query = TextFieldValue("")
+                                        }
+                                    ) {
+                                        Column(Modifier.padding(5.dp)) {
+                                            Text(text = "Аудитория " + res.title,
+                                                fontSize = 20.sp,
+                                                fontWeight = FontWeight.Bold)
+                                            Text(text = res.description,
+                                                fontSize = 15.sp)
+                                        }
+                                    }
+                                }
+                            }
                         }
-                        Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
                     }
                 }
             }

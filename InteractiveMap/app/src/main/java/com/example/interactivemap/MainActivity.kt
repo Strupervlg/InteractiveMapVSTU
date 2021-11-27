@@ -31,14 +31,7 @@ class MainActivity : ComponentActivity() {
                 Surface(color = MaterialTheme.colors.background) {
                     //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
                     StartScreen()
-
-                    val mainViewModel: HomeViewModel = viewModel()
-                    mainViewModel.cabinetList = createComponentTutorialList(){}
-
-                    HomeScreen(
-                        viewModel = mainViewModel
-                    )
-
+                    
                     player!!.start()
                 }
             }

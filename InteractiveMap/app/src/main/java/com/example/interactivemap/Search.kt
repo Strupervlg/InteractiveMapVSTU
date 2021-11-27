@@ -5,6 +5,8 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -19,6 +21,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 
@@ -89,6 +92,9 @@ fun SearchTextField(
 
     val focusRequester = remember { FocusRequester() }
 
+    val focusManager = LocalFocusManager.current
+
+
     Surface(
         modifier = modifier
             .then(
@@ -128,7 +134,16 @@ fun SearchTextField(
                             }
                             .focusRequester(focusRequester)
                             .padding(top = 9.dp, bottom = 8.dp, start = 24.dp, end = 8.dp),
-                        singleLine = true
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        keyboardActions = KeyboardActions(
+                            onDone = {
+                                // keyboardController?.hide()
+                                focusManager.clearFocus()
+                            }
+                        )
+
+
                     )
 
                     when {
