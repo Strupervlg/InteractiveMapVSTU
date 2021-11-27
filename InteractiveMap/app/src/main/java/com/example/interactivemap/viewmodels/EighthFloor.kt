@@ -25,34 +25,29 @@ class EighthFloor(application: Application) : AndroidViewModel(application) {
     }
     private val tileStreamProvider = makeTileStreamProvider8(appContext)
 
-//    private val markers = listOf(
-//        MarkerInfo("601", 0.5765, 0.59, R.drawable.cab601),
-//        MarkerInfo("602", 0.518, 0.59, R.drawable.cab602),
-//        MarkerInfo("603", 0.46, 0.59, R.drawable.cab603),
-//        MarkerInfo("604", 0.4, 0.59, R.drawable.cab604),
-//        MarkerInfo("605", 0.345, 0.59, R.drawable.cab605),
-//        MarkerInfo("606", 0.3, 0.59, R.drawable.cab606),
-//        MarkerInfo("607", 0.245, 0.58, R.drawable.cab607),
-//        MarkerInfo("608", 0.245, 0.41, R.drawable.cab608),
-//        MarkerInfo("609", 0.288, 0.41, R.drawable.cab609),
-//        MarkerInfo("610", 0.505, 0.40, R.drawable.cab610),
-//        MarkerInfo("611", 0.535, 0.40, R.drawable.cab611),
-//        MarkerInfo("612", 0.57, 0.37, R.drawable.cab612)
-//    )
+    private val markers = listOf(
+        MarkerInfo("801", 0.5476, 0.59, R.drawable.cab801),
+        MarkerInfo("802", 0.4, 0.59, R.drawable.cab802),
+        MarkerInfo("803", 0.3, 0.59, R.drawable.cab803),
+        MarkerInfo("804", 0.245, 0.58, R.drawable.cab804),
+        MarkerInfo("805", 0.245, 0.41, R.drawable.cab805),
+        MarkerInfo("806", 0.52, 0.40, R.drawable.cab806),
+        MarkerInfo("807", 0.573, 0.37, R.drawable.cab807)
+    )
 
     val state: MapState by mutableStateOf(
         MapState(5, 4056, 2048, tileStreamProvider).apply {
             minimumScaleMode = Fill
-//            for (marker in markers) {
-//                addMarker(marker.id, marker.x, marker.y) {
-//                    Icon(
-//                        painter = painterResource(id = marker.idPaint),
-//                        contentDescription = null,
-//                        modifier = Modifier.size(35.dp),
-//                        tint = Color(0xCC2196F3)
-//                    )
-//                }
-//            }
+            for (marker in markers) {
+                addMarker(marker.id, marker.x, marker.y) {
+                    Icon(
+                        painter = painterResource(id = marker.idPaint),
+                        contentDescription = null,
+                        modifier = Modifier.size(35.dp),
+                        tint = Color(0xCC2196F3)
+                    )
+                }
+            }
 
             onMarkerClick { id, x, y ->
 
