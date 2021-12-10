@@ -12,12 +12,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import 	android.media.MediaPlayer
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.interactivemap.ui.screens.*
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
@@ -39,6 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
 @ExperimentalAnimationApi

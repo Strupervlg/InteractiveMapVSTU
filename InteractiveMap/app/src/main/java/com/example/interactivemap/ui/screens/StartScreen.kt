@@ -1,5 +1,6 @@
 package com.example.interactivemap.ui.screens
 
+import android.widget.ImageView
 import androidx.compose.ui.Modifier
 import com.example.interactivemap.viewmodels.*
 import com.example.interactivemap.*
@@ -7,6 +8,7 @@ import ovh.plrapps.mapcompose.ui.MapUI
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -43,6 +45,10 @@ import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.onMarkerClick
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.painterResource
+import com.example.interactivemap.R
 
 
 var sizeSpaceBetweenButtons: Float = 1.5F
@@ -58,6 +64,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val selectedOption = remember { mutableStateOf(floors[0]) }
     val centerOn = remember { mutableStateOf("") }
     val r = remember { mutableStateOf("") }
+    val imgNumb = remember { mutableStateOf("") }
 
     if (selectedOption.value == 9) {
         r.value = ""
@@ -160,7 +167,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
     }
 
-    cabinetDescription(r)
+    cabinetDescription(r, imgNumb)
 
     val mainViewModel: HomeViewModel = viewModel()
     mainViewModel.cabinetList = createComponentTutorialList()
@@ -170,6 +177,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
         selectedOption = selectedOption,
         onCenter = centerOn
     )
+    fullsizeImage(imgNumb)
 }
 
 data class SuggestionModel(val tag: String) {
@@ -617,7 +625,9 @@ fun HomeScreen(
                     ) {
                         val scrollState = rememberScrollState()
                         LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
-                        Column(modifier = Modifier.padding(10.dp).verticalScroll(scrollState)) {
+                        Column(modifier = Modifier
+                            .padding(10.dp)
+                            .verticalScroll(scrollState)) {
                             viewModel.cabinetList.forEach { cab ->
                                 Box(
                                     modifier = Modifier
@@ -668,7 +678,9 @@ fun HomeScreen(
                     ) {
                         val scrollState = rememberScrollState()
                         LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
-                        Column(modifier = Modifier.padding(10.dp).verticalScroll(scrollState)) {
+                        Column(modifier = Modifier
+                            .padding(10.dp)
+                            .verticalScroll(scrollState)) {
                             state.searchResults.forEach { res ->
                                 Box(
                                     modifier = Modifier
@@ -709,7 +721,7 @@ fun HomeScreen(
 
 @Composable
 @ExperimentalAnimationApi
-fun cabinetDescription(idCabindet: MutableState<String>) {
+fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<String>) {
     if (!idCabindet.value.isEmpty()) {
         var visibleDescription = remember { mutableStateOf(true) }
         AnimatedVisibility(visible = visibleDescription.value) {
@@ -746,6 +758,15 @@ fun cabinetDescription(idCabindet: MutableState<String>) {
                     ) {
                         Text(cabinetToDiscription(idCabindet.value))
                     }
+                    Row(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(start = 10.dp, end = 10.dp, bottom = 10.dp),
+                        horizontalArrangement = Arrangement.Start,
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        imagesCabinet(numbImg)
+                    }
 
                     Column(
                         horizontalAlignment = Alignment.End,
@@ -761,6 +782,66 @@ fun cabinetDescription(idCabindet: MutableState<String>) {
                         }
                     }
                 }
+            }
+        }
+    }
+}
+
+@Composable
+fun imagesCabinet(numbImg: MutableState<String>) {
+    val scrollState = rememberScrollState()
+    LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
+    Row(modifier = Modifier
+        .padding(10.dp)
+        .horizontalScroll(scrollState)) {
+        for(i in 0..8) {
+            Image(painter = painterResource(id = R.drawable.test), contentDescription = "asd",
+                modifier = Modifier
+                    .height(100.dp)
+                    .width(100.dp)
+                    .clickable { numbImg.value = "1" })
+            Spacer(modifier = Modifier.width(5.dp))
+        }
+    }
+}
+
+@Composable
+fun fullsizeImage(numbImg: MutableState<String>) {
+    if(numbImg.value != "") {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black)) {
+            var scale by remember { mutableStateOf(1f) }
+            Image(
+                painter = painterResource(id = R.drawable.test), contentDescription = "asd",
+                modifier = Modifier
+                    .fillMaxSize()
+                    .graphicsLayer(
+                        scaleX = scale,
+                        scaleY = scale
+                    )
+                    .pointerInput(Unit) {
+                        detectTransformGestures { _, _, zoom, _ ->
+                            scale = when {
+                                scale < 1f -> 1f
+                                scale > 3f -> 3f
+                                else -> scale * zoom
+                            }
+                        }
+                    }
+            )
+        }
+        Column(
+            horizontalAlignment = Alignment.End,
+            verticalArrangement = Arrangement.Top
+        ) {
+            Spacer(modifier = Modifier.fillMaxWidth())
+            IconButton(
+                modifier = Modifier.padding(end = 2.dp),
+                onClick = {
+                    numbImg.value = ""
+                }) {
+                Icon(imageVector = Icons.Default.Close, contentDescription = null, tint = Color.White)
             }
         }
     }
