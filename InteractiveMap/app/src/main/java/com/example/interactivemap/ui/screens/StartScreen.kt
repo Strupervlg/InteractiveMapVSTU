@@ -160,6 +160,8 @@ fun StartScreen(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
     }
 
+    cabinetDescription(r)
+
     val mainViewModel: HomeViewModel = viewModel()
     mainViewModel.cabinetList = createComponentTutorialList()
 
@@ -168,8 +170,6 @@ fun StartScreen(modifier: Modifier = Modifier) {
         selectedOption = selectedOption,
         onCenter = centerOn
     )
-
-    cabinetDescription(r)
 }
 
 data class SuggestionModel(val tag: String) {
