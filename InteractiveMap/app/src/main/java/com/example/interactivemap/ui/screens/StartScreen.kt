@@ -808,12 +808,11 @@ fun imagesCabinet(numbImg: MutableState<Int>, cabinet: String) {
         .padding(10.dp)
         .horizontalScroll(scrollState)) {
         images.forEach { img ->
-            Image(painter = painterResource(id = img), contentDescription = "asd",
+            Image(painter = painterResource(id = img), contentDescription = null,
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp)
                     .clickable { numbImg.value = images.indexOf(img) })
-            Spacer(modifier = Modifier.width(5.dp))
         }
     }
 }
@@ -835,7 +834,7 @@ fun fullsizeImage(numbImg: MutableState<Int>) {
 
             HorizontalPager(count = images.size, state = pagerState) { page ->
                 Image(
-                    painter = painterResource(id = images.get(page)), contentDescription = "",
+                    painter = painterResource(id = images.get(page)), contentDescription = null,
                     modifier = Modifier
                         .fillMaxSize()
 //                        .graphicsLayer(
@@ -901,11 +900,21 @@ fun cabinetToDiscription(cabinet: String): String {
 
 var imagesCab602 = listOf(R.drawable.cab602img1, R.drawable.cab602img2, R.drawable.cab602img3, R.drawable.cab602img4)
 var imagesCab604 = listOf(R.drawable.cab604img1, R.drawable.cab604img2, R.drawable.cab604img3, R.drawable.cab604img4)
+var imagesCab606 = listOf(R.drawable.cab606img1, R.drawable.cab606img2, R.drawable.cab606img3, R.drawable.cab606img4)
+var imagesCab901 = listOf(R.drawable.cab901img1, R.drawable.cab901img2, R.drawable.cab901img3, R.drawable.cab901img4, R.drawable.cab901img5)
+var imagesCab902a = listOf(R.drawable.cab902aimg1, R.drawable.cab902aimg2)
+var imagesCab902b = listOf(R.drawable.cab902bimg1, R.drawable.cab902bimg2)
+var imagesCab903 = listOf(R.drawable.cab903img1, R.drawable.cab903img2, R.drawable.cab903img3, R.drawable.cab903img4)
 
 var stareges = listOf(R.drawable.test, R.drawable.test, R.drawable.test ,R.drawable.test, R.drawable.test, R.drawable.test, R.drawable.test)
 
 fun cabinetToImages(cabinet: String) : List<Int> {
     if (cabinet == "602") return imagesCab602
     else if(cabinet == "604") return imagesCab604
+    else if(cabinet == "606") return imagesCab606
+    else if(cabinet == "901") return imagesCab901
+    else if(cabinet == "902а") return imagesCab902a
+    else if(cabinet == "902б") return imagesCab902b
+    else if(cabinet == "903") return imagesCab903
     else return stareges
 }
