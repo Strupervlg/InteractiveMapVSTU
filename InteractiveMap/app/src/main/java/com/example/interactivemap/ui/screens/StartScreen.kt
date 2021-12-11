@@ -1,5 +1,6 @@
 package com.example.interactivemap.ui.screens
 
+import android.graphics.pdf.PdfDocument
 import android.widget.ImageView
 import androidx.compose.ui.Modifier
 import com.example.interactivemap.viewmodels.*
@@ -8,7 +9,10 @@ import ovh.plrapps.mapcompose.ui.MapUI
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.*
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
+import androidx.compose.foundation.gestures.rememberTransformableState
+import androidx.compose.foundation.gestures.transformable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -45,15 +49,23 @@ import kotlinx.coroutines.launch
 import ovh.plrapps.mapcompose.api.onMarkerClick
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import com.example.interactivemap.R
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
+import java.util.*
 
 
 var sizeSpaceBetweenButtons: Float = 1.5F
+var images : List<Int> = listOf()
 
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @ExperimentalComposeUiApi
 @ExperimentalFoundationApi
@@ -64,7 +76,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val selectedOption = remember { mutableStateOf(floors[0]) }
     val centerOn = remember { mutableStateOf("") }
     val r = remember { mutableStateOf("") }
-    val imgNumb = remember { mutableStateOf("") }
+    val imgNumb = remember { mutableStateOf(-1) }
 
     if (selectedOption.value == 9) {
         r.value = ""
@@ -721,7 +733,7 @@ fun HomeScreen(
 
 @Composable
 @ExperimentalAnimationApi
-fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<String>) {
+fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<Int>) {
     if (!idCabindet.value.isEmpty()) {
         var visibleDescription = remember { mutableStateOf(true) }
         AnimatedVisibility(visible = visibleDescription.value) {
@@ -765,7 +777,7 @@ fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<S
                         horizontalArrangement = Arrangement.Start,
                         verticalAlignment = Alignment.Bottom
                     ) {
-                        imagesCabinet(numbImg)
+                        imagesCabinet(numbImg, idCabindet.value)
                     }
 
                     Column(
@@ -788,48 +800,53 @@ fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<S
 }
 
 @Composable
-fun imagesCabinet(numbImg: MutableState<String>) {
+fun imagesCabinet(numbImg: MutableState<Int>, cabinet: String) {
+    images = cabinetToImages(cabinet)
     val scrollState = rememberScrollState()
     LaunchedEffect(Unit) { scrollState.animateScrollTo(0) }
     Row(modifier = Modifier
         .padding(10.dp)
         .horizontalScroll(scrollState)) {
-        for(i in 0..8) {
-            Image(painter = painterResource(id = R.drawable.test), contentDescription = "asd",
+        images.forEach { img ->
+            Image(painter = painterResource(id = img), contentDescription = "asd",
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp)
-                    .clickable { numbImg.value = "1" })
+                    .clickable { numbImg.value = images.indexOf(img) })
             Spacer(modifier = Modifier.width(5.dp))
         }
     }
 }
 
+@ExperimentalPagerApi
 @Composable
-fun fullsizeImage(numbImg: MutableState<String>) {
-    if(numbImg.value != "") {
+fun fullsizeImage(numbImg: MutableState<Int>) {
+    if(numbImg.value != -1) {
         Column(modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)) {
-            var scale by remember { mutableStateOf(1f) }
-            Image(
-                painter = painterResource(id = R.drawable.test), contentDescription = "asd",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .graphicsLayer(
-                        scaleX = scale,
-                        scaleY = scale
-                    )
-                    .pointerInput(Unit) {
-                        detectTransformGestures { _, _, zoom, _ ->
-                            scale = when {
-                                scale < 1f -> 1f
-                                scale > 3f -> 3f
-                                else -> scale * zoom
-                            }
-                        }
-                    }
-            )
+//            var scale by remember { mutableStateOf(1f) }
+//            var offset by remember { mutableStateOf(Offset.Zero) }
+//            val state = rememberTransformableState { zoomChange, offsetChange, _ ->
+//                scale *= zoomChange
+//                offset += offsetChange
+//            }
+            val pagerState = rememberPagerState(numbImg.value)
+
+            HorizontalPager(count = images.size, state = pagerState) { page ->
+                Image(
+                    painter = painterResource(id = images.get(page)), contentDescription = "",
+                    modifier = Modifier
+                        .fillMaxSize()
+//                        .graphicsLayer(
+//                            scaleX = scale,
+//                            scaleY = scale,
+//                            translationX = offset.x,
+//                            translationY = offset.y
+//                        )
+//                        .transformable(state = state)
+                )
+            }
         }
         Column(
             horizontalAlignment = Alignment.End,
@@ -839,7 +856,7 @@ fun fullsizeImage(numbImg: MutableState<String>) {
             IconButton(
                 modifier = Modifier.padding(end = 2.dp),
                 onClick = {
-                    numbImg.value = ""
+                    numbImg.value = -1
                 }) {
                 Icon(imageVector = Icons.Default.Close, contentDescription = null, tint = Color.White)
             }
@@ -880,4 +897,15 @@ fun cabinetToDiscription(cabinet: String): String {
     else if (cabinet == "611") return "Аудитория для проведения практик"
     else if (cabinet == "612") return "Аудитория для проведения лабораторных работ"
     else return ""
+}
+
+var imagesCab602 = listOf(R.drawable.cab602img1, R.drawable.cab602img2, R.drawable.cab602img3, R.drawable.cab602img4)
+var imagesCab604 = listOf(R.drawable.cab604img1, R.drawable.cab604img2, R.drawable.cab604img3, R.drawable.cab604img4)
+
+var stareges = listOf(R.drawable.test, R.drawable.test, R.drawable.test ,R.drawable.test, R.drawable.test, R.drawable.test, R.drawable.test)
+
+fun cabinetToImages(cabinet: String) : List<Int> {
+    if (cabinet == "602") return imagesCab602
+    else if(cabinet == "604") return imagesCab604
+    else return stareges
 }

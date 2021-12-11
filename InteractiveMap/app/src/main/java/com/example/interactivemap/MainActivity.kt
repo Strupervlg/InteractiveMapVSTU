@@ -16,9 +16,11 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.interactivemap.ui.screens.*
+import com.google.accompanist.pager.ExperimentalPagerApi
 import kotlinx.coroutines.delay
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalPagerApi
     @ExperimentalMaterialApi
     @ExperimentalFoundationApi
     @ExperimentalComposeUiApi
@@ -41,6 +43,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalPagerApi
 @ExperimentalMaterialApi
 @ExperimentalFoundationApi
 @ExperimentalComposeUiApi
