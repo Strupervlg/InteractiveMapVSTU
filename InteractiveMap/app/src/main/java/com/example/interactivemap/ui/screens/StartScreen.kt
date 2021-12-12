@@ -90,7 +90,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: NinthFloorDark = viewModel()
-                MapUI(modifier, state = floor.state)
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
@@ -108,7 +108,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: NinthFloor = viewModel()
-                MapUI(modifier, state = floor.state, )
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state, )
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
@@ -126,7 +126,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: EighthFloorDark = viewModel()
-                MapUI(modifier, state = floor.state)
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
@@ -144,7 +144,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: EighthFloor = viewModel()
-                MapUI(modifier, state = floor.state)
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
@@ -162,7 +162,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: SixthFloorDark = viewModel()
-                MapUI(modifier, state = floor.state)
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
@@ -180,7 +180,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     r.value = ""
                 }
                 val floor: SixthFloor = viewModel()
-                MapUI(modifier, state = floor.state)
+                MapUI(modifier.background(MaterialTheme.colors.background), state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
                         r.value = ""
