@@ -19,10 +19,12 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -149,7 +151,9 @@ fun SearchTextField(
                                 // keyboardController?.hide()
                                 focusManager.clearFocus()
                             }
-                        )
+                        ),
+                        textStyle = TextStyle(color = MaterialTheme.colors.primaryVariant),
+                        cursorBrush = SolidColor(MaterialTheme.colors.primaryVariant)
                     )
 
                     when {
