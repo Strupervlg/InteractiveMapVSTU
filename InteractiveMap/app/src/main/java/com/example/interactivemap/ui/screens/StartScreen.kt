@@ -85,26 +85,29 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val isDark = remember { mutableStateOf(false) }
     InteractiveMapTheme(darkTheme = isDark.value) {
         Surface(color = MaterialTheme.colors.background) {
-        if (selectedOption.value == 9 && isDark.value) {
-            r.value = ""
-            val floor: NinthFloorDark = viewModel()
-            MapUI(modifier, state = floor.state)
-            floor.state.onMarkerClick { id, x, y ->
-                if (r.value == id) {
+            if (selectedOption.value == 9 && isDark.value) {
+                if(!r.value.startsWith("9")) {
                     r.value = ""
-                } else {
-                    r.value = id
+                }
+                val floor: NinthFloorDark = viewModel()
+                MapUI(modifier, state = floor.state)
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
+                    } else {
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
                 }
             }
-            if (!centerOn.value.isEmpty()) {
-                floor.onCenter(centerOn.value)
-                centerOn.value = ""
-            }
-        }
-        else if (selectedOption.value == 9 && !isDark.value) {
-                r.value = ""
+            else if (selectedOption.value == 9 && !isDark.value) {
+                if(!r.value.startsWith("9")) {
+                    r.value = ""
+                }
                 val floor: NinthFloor = viewModel()
-
                 MapUI(modifier, state = floor.state, )
                 floor.state.onMarkerClick { id, x, y ->
                     if (r.value == id) {
@@ -117,57 +120,65 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     floor.onCenter(centerOn.value)
                     centerOn.value = ""
                 }
-        }
-        if (selectedOption.value == 8 && isDark.value) {
-            r.value = ""
-            val floor: EighthFloorDark = viewModel()
-            MapUI(modifier, state = floor.state)
-            floor.state.onMarkerClick { id, x, y ->
-                if (r.value == id) {
+            }
+            if (selectedOption.value == 8 && isDark.value) {
+                if(!r.value.startsWith("8")) {
                     r.value = ""
-                } else {
-                    r.value = id
+                }
+                val floor: EighthFloorDark = viewModel()
+                MapUI(modifier, state = floor.state)
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
+                    } else {
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
                 }
             }
-            if (!centerOn.value.isEmpty()) {
-                floor.onCenter(centerOn.value)
-                centerOn.value = ""
-            }
-        }
-        else if (selectedOption.value == 8 && !isDark.value) {
-            r.value = ""
-            val floor: EighthFloor = viewModel()
-            MapUI(modifier, state = floor.state)
-            floor.state.onMarkerClick { id, x, y ->
-                if (r.value == id) {
+            else if (selectedOption.value == 8 && !isDark.value) {
+                if(!r.value.startsWith("8")) {
                     r.value = ""
-                } else {
-                    r.value = id
+                }
+                val floor: EighthFloor = viewModel()
+                MapUI(modifier, state = floor.state)
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
+                    } else {
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
                 }
             }
-            if (!centerOn.value.isEmpty()) {
-                floor.onCenter(centerOn.value)
-                centerOn.value = ""
-            }
-        }
-        if (selectedOption.value == 6 && isDark.value) {
-            r.value = ""
-            val floor: SixthFloorDark = viewModel()
-            MapUI(modifier, state = floor.state)
-            floor.state.onMarkerClick { id, x, y ->
-                if (r.value == id) {
+            if (selectedOption.value == 6 && isDark.value) {
+                if(!r.value.startsWith("6")) {
                     r.value = ""
-                } else {
-                    r.value = id
+                }
+                val floor: SixthFloorDark = viewModel()
+                MapUI(modifier, state = floor.state)
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
+                    } else {
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
                 }
             }
-            if (!centerOn.value.isEmpty()) {
-                floor.onCenter(centerOn.value)
-                centerOn.value = ""
-            }
-        }
-        else if (selectedOption.value == 6 && !isDark.value) {
-                r.value = ""
+            else if (selectedOption.value == 6 && !isDark.value) {
+                if(!r.value.startsWith("6")) {
+                    r.value = ""
+                }
                 val floor: SixthFloor = viewModel()
                 MapUI(modifier, state = floor.state)
                 floor.state.onMarkerClick { id, x, y ->
@@ -181,7 +192,7 @@ fun StartScreen(modifier: Modifier = Modifier) {
                     floor.onCenter(centerOn.value)
                     centerOn.value = ""
                 }
-        }
+            }
             Column(modifier = Modifier.padding(10.dp)) {
                 Spacer(modifier = Modifier.height(70.dp))
                 floors.forEach { floor ->
@@ -816,7 +827,7 @@ fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<I
                     border = BorderStroke(width = 3.5.dp, color = MaterialTheme.colors.primary),
                     modifier = Modifier
                         .size(310.dp, 240.dp)
-                    ) {
+                ) {
                     Row(
                         modifier = Modifier.fillMaxSize(),
                         horizontalArrangement = Arrangement.Center,
