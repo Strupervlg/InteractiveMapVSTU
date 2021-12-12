@@ -19,8 +19,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
@@ -36,7 +38,8 @@ fun SearchBar(
     onBack: () -> Unit,
     searching: Boolean,
     focused: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isDark: MutableState<Boolean>
 ) {
 
 //    println("🍭 SearchBar() query: $query, searching: $searching, focused: $focused")
@@ -61,16 +64,23 @@ fun SearchBar(
                 Icon(imageVector = Icons.Default.ArrowBack, contentDescription = null)
             }
         }
-
-        SearchTextField(
-            query,
-            onQueryChange,
-            onSearchFocusChange,
-            onClearQuery,
-            searching,
-            focused,
-            modifier.weight(1f)
-        )
+            SearchTextField(
+                query,
+                onQueryChange,
+                onSearchFocusChange,
+                onClearQuery,
+                searching,
+                focused,
+                modifier.weight(1f)
+            )
+        Column() {
+            IconButton(
+                onClick = {
+                    isDark.value = !isDark.value
+                }) {
+                Icon(imageVector = ImageVector.vectorResource(id = R.drawable.darkmodeicon), contentDescription = null)
+            }
+        }
     }
 }
 
@@ -102,10 +112,10 @@ fun SearchTextField(
                         top = 8.dp,
                         bottom = 8.dp,
                         start = if (!focused) 16.dp else 0.dp,
-                        end = 16.dp
+                        end = 2.dp
                     )
             ),
-        color = Color(0xffF5F5F5),
+        color = MaterialTheme.colors.onSurface,
         shape = RoundedCornerShape(percent = 50),
     ) {
 

@@ -20,10 +20,12 @@ import ovh.plrapps.mapcompose.ui.layout.Fill
 import ovh.plrapps.mapcompose.ui.state.MapState
 
 class EighthFloor(application: Application) : AndroidViewModel(application) {
+
     private val appContext: Context by lazy {
         getApplication<Application>().applicationContext
     }
-    private val tileStreamProvider = makeTileStreamProvider8(appContext)
+
+    private var tileStreamProvider = makeTileStreamProvider8(appContext)
 
     private val markers = listOf(
         MarkerInfo("801", 0.5476, 0.59, R.drawable.cab801),

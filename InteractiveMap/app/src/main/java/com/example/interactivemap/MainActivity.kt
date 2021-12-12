@@ -1,5 +1,6 @@
 package com.example.interactivemap
 
+import android.app.Activity
 import android.media.AudioAttributes
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -11,6 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import 	android.media.MediaPlayer
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -27,18 +30,16 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         val player = MediaPlayer.create(this, R.raw.cut_map)
-
         super.onCreate(savedInstanceState)
+        //AppCompatDelegate.setDefaultNightMode(AppCompatActivity)
         setContent {
-            InteractiveMapTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
+                //Surface(color = MaterialTheme.colors.background) {
                     //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
                     StartScreen()
 
                     player!!.start()
-                }
-            }
+                //}
         }
     }
 }
@@ -51,8 +52,6 @@ class MainActivity : ComponentActivity() {
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
-    InteractiveMapTheme {
         //val ninthFloor: NinthFloor = viewModel() | viewModel = ninthFloor
         StartScreen()
-    }
 }

@@ -23,7 +23,8 @@ class SixthFloor(application: Application) : AndroidViewModel(application) {
     private val appContext: Context by lazy {
         getApplication<Application>().applicationContext
     }
-    private val tileStreamProvider = makeTileStreamProvider6(appContext)
+
+    private var tileStreamProvider = makeTileStreamProvider6(appContext)
 
     private val markers = listOf(
         MarkerInfo("601", 0.5765, 0.59, R.drawable.cab601),

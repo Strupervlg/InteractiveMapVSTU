@@ -12,6 +12,15 @@ fun makeTileStreamProvider6(appContext: Context) =
         }
     }
 
+fun makeTileStreamProvider6Dark(appContext: Context) =
+    TileStreamProvider { row, col, zoomLvl ->
+        try {
+            appContext.assets?.open("tiles/sixth_floor_dark/$zoomLvl/$row/$col.jpg")
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 fun makeTileStreamProvider9(appContext: Context) =
     TileStreamProvider { row, col, zoomLvl ->
         try {
@@ -21,10 +30,28 @@ fun makeTileStreamProvider9(appContext: Context) =
         }
     }
 
+fun makeTileStreamProvider9Dark(appContext: Context) =
+    TileStreamProvider { row, col, zoomLvl ->
+        try {
+            appContext.assets?.open("tiles/ninth_floor_dark/$zoomLvl/$row/$col.jpg")
+        } catch (e: Exception) {
+            null
+        }
+    }
+
 fun makeTileStreamProvider8(appContext: Context) =
     TileStreamProvider { row, col, zoomLvl ->
         try {
             appContext.assets?.open("tiles/eighth_floor/$zoomLvl/$row/$col.jpg")
+        } catch (e: Exception) {
+            null
+        }
+    }
+
+fun makeTileStreamProvider8Dark(appContext: Context) =
+    TileStreamProvider { row, col, zoomLvl ->
+        try {
+            appContext.assets?.open("tiles/eighth_floor_dark/$zoomLvl/$row/$col.jpg")
         } catch (e: Exception) {
             null
         }

@@ -1,5 +1,6 @@
 package com.example.interactivemap.ui.screens
 
+import android.content.res.Resources
 import android.graphics.pdf.PdfDocument
 import android.widget.ImageView
 import androidx.compose.ui.Modifier
@@ -51,10 +52,14 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.consumeAllChanges
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.isDebugInspectorInfoEnabled
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import com.example.interactivemap.R
+import com.example.interactivemap.ui.theme.InteractiveMapTheme
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -77,119 +82,179 @@ fun StartScreen(modifier: Modifier = Modifier) {
     val centerOn = remember { mutableStateOf("") }
     val r = remember { mutableStateOf("") }
     val imgNumb = remember { mutableStateOf(-1) }
+    val isDark = remember { mutableStateOf(false) }
+    InteractiveMapTheme(darkTheme = isDark.value) {
+        Surface(color = MaterialTheme.colors.background) {
+        if (selectedOption.value == 9 && isDark.value) {
+            r.value = ""
+            val floor: NinthFloorDark = viewModel()
+            MapUI(modifier, state = floor.state)
+            floor.state.onMarkerClick { id, x, y ->
+                if (r.value == id) {
+                    r.value = ""
+                } else {
+                    r.value = id
+                }
+            }
+            if (!centerOn.value.isEmpty()) {
+                floor.onCenter(centerOn.value)
+                centerOn.value = ""
+            }
+        }
+        else if (selectedOption.value == 9 && !isDark.value) {
+                r.value = ""
+                val floor: NinthFloor = viewModel()
 
-    if (selectedOption.value == 9) {
-        r.value = ""
-        val floor: NinthFloor = viewModel()
-        MapUI(modifier, state = floor.state)
-        floor.state.onMarkerClick { id, x, y ->
-            if (r.value == id) {
-                r.value = ""
-            } else {
-                r.value = id
-            }
-        }
-        if(!centerOn.value.isEmpty()) {
-            floor.onCenter(centerOn.value)
-            centerOn.value = ""
-        }
-    }
-    if (selectedOption.value == 8) {
-        r.value = ""
-        val floor: EighthFloor = viewModel()
-        MapUI(modifier, state = floor.state)
-        floor.state.onMarkerClick { id, x, y ->
-            if (r.value == id) {
-                r.value = ""
-            } else {
-                r.value = id
-            }
-        }
-        if(!centerOn.value.isEmpty()) {
-            floor.onCenter(centerOn.value)
-            centerOn.value = ""
-        }
-    }
-    if (selectedOption.value == 6) {
-        r.value = ""
-        val floor: SixthFloor = viewModel()
-        MapUI(modifier, state = floor.state)
-        floor.state.onMarkerClick { id, x, y ->
-            if (r.value == id) {
-                r.value = ""
-            } else {
-                r.value = id
-            }
-        }
-        if(!centerOn.value.isEmpty()) {
-            floor.onCenter(centerOn.value)
-            centerOn.value = ""
-        }
-    }
-
-    Column(modifier = Modifier.padding(10.dp)) {
-        Spacer(modifier = Modifier.height(70.dp))
-        floors.forEach { floor ->
-            val selected = selectedOption.value == floor
-            Button(onClick = { selectedOption.value = floor }, modifier =
-            Modifier
-                .selectable(
-                    selected = selected,
-                    onClick = { }
-                ),
-                border = BorderStroke(width = if (selected) {2.dp} else {0.dp}, color = Color.Black),
-                colors = ButtonDefaults.textButtonColors(
-                    backgroundColor = if (selected) {
-                        MaterialTheme.colors.secondary
+                MapUI(modifier, state = floor.state, )
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
                     } else {
-                        MaterialTheme.colors.primary
-                    },
-                    contentColor = Color.Black
-                )
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
+                }
+        }
+        if (selectedOption.value == 8 && isDark.value) {
+            r.value = ""
+            val floor: EighthFloorDark = viewModel()
+            MapUI(modifier, state = floor.state)
+            floor.state.onMarkerClick { id, x, y ->
+                if (r.value == id) {
+                    r.value = ""
+                } else {
+                    r.value = id
+                }
+            }
+            if (!centerOn.value.isEmpty()) {
+                floor.onCenter(centerOn.value)
+                centerOn.value = ""
+            }
+        }
+        else if (selectedOption.value == 8 && !isDark.value) {
+            r.value = ""
+            val floor: EighthFloor = viewModel()
+            MapUI(modifier, state = floor.state)
+            floor.state.onMarkerClick { id, x, y ->
+                if (r.value == id) {
+                    r.value = ""
+                } else {
+                    r.value = id
+                }
+            }
+            if (!centerOn.value.isEmpty()) {
+                floor.onCenter(centerOn.value)
+                centerOn.value = ""
+            }
+        }
+        if (selectedOption.value == 6 && isDark.value) {
+            r.value = ""
+            val floor: SixthFloorDark = viewModel()
+            MapUI(modifier, state = floor.state)
+            floor.state.onMarkerClick { id, x, y ->
+                if (r.value == id) {
+                    r.value = ""
+                } else {
+                    r.value = id
+                }
+            }
+            if (!centerOn.value.isEmpty()) {
+                floor.onCenter(centerOn.value)
+                centerOn.value = ""
+            }
+        }
+        else if (selectedOption.value == 6 && !isDark.value) {
+                r.value = ""
+                val floor: SixthFloor = viewModel()
+                MapUI(modifier, state = floor.state)
+                floor.state.onMarkerClick { id, x, y ->
+                    if (r.value == id) {
+                        r.value = ""
+                    } else {
+                        r.value = id
+                    }
+                }
+                if (!centerOn.value.isEmpty()) {
+                    floor.onCenter(centerOn.value)
+                    centerOn.value = ""
+                }
+        }
+            Column(modifier = Modifier.padding(10.dp)) {
+                Spacer(modifier = Modifier.height(70.dp))
+                floors.forEach { floor ->
+                    val selected = selectedOption.value == floor
+                    Button(onClick = { selectedOption.value = floor }, modifier =
+                    Modifier
+                        .selectable(
+                            selected = selected,
+                            onClick = { }
+                        ),
+                        border = BorderStroke(
+                            width = if (selected) {
+                                2.dp
+                            } else {
+                                0.dp
+                            }, color = MaterialTheme.colors.secondary
+                        ),
+                        colors = ButtonDefaults.textButtonColors(
+                            backgroundColor = if (selected) {
+                                MaterialTheme.colors.background
+                            } else {
+                                MaterialTheme.colors.primary
+                            },
+                            contentColor = if(selected) MaterialTheme.colors.primaryVariant else Color.Black
+                        )
+                    ) {
+                        Text(text = floor.toString())
+                    }
+                    Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
+                }
+            }
+
+            val snackbarHostState = remember { SnackbarHostState() }
+            val coroutineScope = rememberCoroutineScope()
+
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(text = floor.toString())
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
+
+                Button(onClick = {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar(message = "Данная функция временно не поддерживается")
+                    }
+                }
+                )
+                { Text("Навигатор", color = Color.Black) }
+
+                Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
             }
-            Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
+
+            cabinetDescription(r, imgNumb)
+
+            val mainViewModel: HomeViewModel = viewModel()
+            mainViewModel.cabinetList = createComponentTutorialList()
+
+            HomeScreen(
+                viewModel = mainViewModel,
+                selectedOption = selectedOption,
+                onCenter = centerOn,
+                isDark = isDark
+            )
+
+            fullsizeImage(imgNumb)
         }
     }
-
-    val snackbarHostState = remember { SnackbarHostState() }
-    val coroutineScope = rememberCoroutineScope()
-
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .fillMaxHeight(),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        SnackbarHost(
-            hostState = snackbarHostState,
-            modifier = Modifier.align(Alignment.CenterHorizontally)
-        )
-
-        Button(onClick = {
-            coroutineScope.launch {
-                snackbarHostState.showSnackbar(message = "Данная функция временно не поддерживается")
-            }
-        }
-        )
-        { Text("Навигатор") }
-
-        Spacer(modifier = Modifier.height(sizeSpaceBetweenButtons.dp))
-    }
-
-    cabinetDescription(r, imgNumb)
-
-    val mainViewModel: HomeViewModel = viewModel()
-    mainViewModel.cabinetList = createComponentTutorialList()
-
-    HomeScreen(
-        viewModel = mainViewModel,
-        selectedOption = selectedOption,
-        onCenter = centerOn
-    )
-    fullsizeImage(imgNumb)
 }
 
 data class SuggestionModel(val tag: String) {
@@ -565,7 +630,8 @@ fun HomeScreen(
     viewModel: HomeViewModel,
     state: SearchState<CabinetSectionModel, SuggestionModel> = rememberSearchState(),
     selectedOption: MutableState<Int>,
-    onCenter: MutableState<String>
+    onCenter: MutableState<String>,
+    isDark: MutableState<Boolean>
 ) {
 
     state.suggestions = viewModel.suggestionState.collectAsState(initial = suggestionList).value
@@ -582,7 +648,8 @@ fun HomeScreen(
             onBack = { state.query = TextFieldValue("") },
             searching = state.searching,
             focused = state.focused,
-            modifier = modifier
+            modifier = modifier,
+            isDark = isDark
         )
 
         LaunchedEffect(state.query.text) {
@@ -606,8 +673,8 @@ fun HomeScreen(
                 ) {
                     Card(
                         shape = RoundedCornerShape(15.dp),
-                        backgroundColor = Color.White,
-                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        backgroundColor = MaterialTheme.colors.background,
+                        border = BorderStroke(width = 3.5.dp, color = MaterialTheme.colors.primary),
                         modifier = Modifier
                             .fillMaxHeight()
                     ) {
@@ -630,8 +697,8 @@ fun HomeScreen(
                 ) {
                     Card(
                         shape = RoundedCornerShape(15.dp),
-                        backgroundColor = Color.White,
-                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        backgroundColor = MaterialTheme.colors.background,
+                        border = BorderStroke(width = 3.5.dp, color = MaterialTheme.colors.primary),
                         modifier = Modifier
                             .fillMaxHeight()
                     ) {
@@ -648,8 +715,8 @@ fun HomeScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Card(shape = RoundedCornerShape(10.dp),
-                                        backgroundColor = Color.White,
-                                        border = BorderStroke(width = 1.5.dp, color = VSTUBlue),
+                                        backgroundColor = MaterialTheme.colors.background,
+                                        border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colors.primary),
                                         modifier = Modifier
                                             .fillMaxWidth(),
                                         onClick = {
@@ -683,8 +750,8 @@ fun HomeScreen(
                 ) {
                     Card(
                         shape = RoundedCornerShape(15.dp),
-                        backgroundColor = Color.White,
-                        border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                        backgroundColor = MaterialTheme.colors.background,
+                        border = BorderStroke(width = 3.5.dp, color = MaterialTheme.colors.primary),
                         modifier = Modifier
                             .fillMaxHeight()
                     ) {
@@ -701,8 +768,8 @@ fun HomeScreen(
                                     contentAlignment = Alignment.Center
                                 ) {
                                     Card(shape = RoundedCornerShape(10.dp),
-                                        backgroundColor = Color.White,
-                                        border = BorderStroke(width = 1.5.dp, color = VSTUBlue),
+                                        backgroundColor = MaterialTheme.colors.background,
+                                        border = BorderStroke(width = 1.5.dp, color = MaterialTheme.colors.primary),
                                         modifier = Modifier
                                             .fillMaxWidth(),
                                         onClick = {
@@ -745,8 +812,8 @@ fun cabinetDescription(idCabindet: MutableState<String>, numbImg: MutableState<I
             ) {
                 Card(
                     shape = RoundedCornerShape(15.dp),
-                    backgroundColor = Color.White,
-                    border = BorderStroke(width = 3.5.dp, color = VSTUBlue),
+                    backgroundColor = MaterialTheme.colors.background,
+                    border = BorderStroke(width = 3.5.dp, color = MaterialTheme.colors.primary),
                     modifier = Modifier
                         .size(310.dp, 240.dp)
                     ) {

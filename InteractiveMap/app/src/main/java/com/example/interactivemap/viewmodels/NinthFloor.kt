@@ -21,10 +21,12 @@ import ovh.plrapps.mapcompose.ui.layout.MinimumScaleMode
 import ovh.plrapps.mapcompose.ui.state.MapState
 
 class NinthFloor(application: Application) : AndroidViewModel(application) {
+
     private val appContext: Context by lazy {
         getApplication<Application>().applicationContext
     }
-    private val tileStreamProvider = makeTileStreamProvider9(appContext)
+
+    private var tileStreamProvider = makeTileStreamProvider9(appContext)
 
     private val markers = listOf(
         MarkerInfo("901", 0.518, 0.59, R.drawable.cab901),
